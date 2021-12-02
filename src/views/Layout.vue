@@ -5,7 +5,12 @@
       <div class="title">云•POS商业管理系统</div>
       <div class="account">
         <n-dropdown trigger="click" @select="handleAccount" :options="options">
-          <a class="user">{{ userName }} ({{ account }})</a>
+          <a class="user"
+            >{{ userName }} ({{ account }})
+            <n-icon size="12">
+              <chevron-down />
+            </n-icon>
+          </a>
         </n-dropdown>
       </div>
     </div>
@@ -54,8 +59,10 @@
           <div class="layout-tabs">
             <n-tag
               v-for="tag in tabList"
+              size="large"
               :key="tag.path"
               :closable="tag.path.split('/').length > 2"
+              :color="normalTab"
               @click="changeTab(tag)"
               @close.stop="closeTab(tag)"
             >
@@ -76,6 +83,7 @@
 <script>
 import { defineAsyncComponent } from "vue";
 import { mapState } from "vuex";
+import ErrorComponent from "./Error.vue";
 import {
   Layers,
   Folder,
@@ -88,6 +96,8 @@ import {
   Wallet,
   BarChart,
   Settings,
+  ChevronDown,
+  DotMark,
 } from "@vicons/ionicons5";
 export default {
   name: "Layout",
@@ -98,6 +108,9 @@ export default {
       options: [],
       sideNav: [],
       tabPlatList: [],
+      normalTab: {
+        // borderColor
+      },
     };
   },
   computed: {
@@ -204,8 +217,10 @@ export default {
               break;
 
             default:
+              console.log(item.path);
               tempItem.comp = defineAsyncComponent({
-                loader: () => import("./BlankLayout.vue"),
+                loader: () => import("." + item.path),
+                errorComponent: ErrorComponent,
               });
               break;
           }
@@ -254,6 +269,7 @@ export default {
     Wallet,
     BarChart,
     Settings,
+    ChevronDown,
   },
 };
 </script>

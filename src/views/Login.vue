@@ -39,7 +39,7 @@
           </n-input>
         </n-form-item>
         <n-form-item path="code">
-          <n-input placeholder="验证码" v-model:value="form.code">
+          <n-input placeholder="验证码" v-model:value="form.code" @keyup.enter="login">
             <template #prefix>
               <n-icon>
                 <image-outline />
