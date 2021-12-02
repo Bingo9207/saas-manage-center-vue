@@ -4,8 +4,8 @@
       <div class="logo"><img src="../assets/logo.png" alt="logo" /></div>
       <div class="title">云•POS商业管理系统</div>
       <div class="account">
-        <n-dropdown trigger="click" @select="handleSelect" :options="options">
-          <a>{{ userName }} ({{ account }})</a>
+        <n-dropdown trigger="click" @select="handleAccount" :options="options">
+          <a class="user">{{ userName }} ({{ account }})</a>
         </n-dropdown>
       </div>
     </div>
@@ -57,6 +57,7 @@
               :key="tag.path"
               :closable="tag.path.split('/').length > 2"
               @click="changeTab(tag)"
+              @close.stop="closeTab(tag)"
             >
               {{ tag.name }}
             </n-tag>
@@ -211,6 +212,27 @@ export default {
           this.tabPlatList.push(tempItem);
         }
       });
+      this.tabPlatList.forEach((item, index) => {
+        if (this.tabList.findIndex((row) => row.path === item.path) < 0) {
+          this.tabPlatList.splice(index, 1);
+        }
+      });
+    },
+    // 用户操作
+    handleAccount(type) {
+      switch (type) {
+        case "logout":
+          this.$store.commit("router/logout");
+          this.$router.push("/login");
+          break;
+
+        default:
+          break;
+      }
+    },
+    // 关闭tab页
+    closeTab(record) {
+      this.$store.commit("router/deleteTabItem", record.path);
     },
   },
   watch: {
@@ -271,6 +293,10 @@ export default {
       float: right;
       padding-right: 20px;
       line-height: 50px;
+
+      .user {
+        cursor: pointer;
+      }
     }
   }
 

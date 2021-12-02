@@ -42,18 +42,29 @@
         </div>
       </div>
       <div class="right">
-        <n-card title="卡片" size="small" :header-style="headerStyle">
+        <n-card
+          class="card"
+          title="卡片"
+          size="small"
+          :segmented="{
+            content: 'hard',
+          }"
+          :header-style="headerStyle"
+          :content-style="contentStyle"
+        >
           卡片内容
         </n-card>
         <n-card
+          class="card"
           title="常用功能"
           size="small"
           :segmented="{
             content: 'hard',
           }"
+          :header-style="headerStyle"
+          :content-style="contentStyle"
         >
           卡片内容
-           <n-button type="primary">Primary</n-button>
         </n-card>
       </div>
     </div>
@@ -104,8 +115,11 @@ export default {
       loadingStock: false,
       stockData: [],
       headerStyle: {
-        padding: "6px 10px",
-        borderBottom: "1px solid #ddd",
+        fontSize: "14px",
+        padding: "6px 12px",
+      },
+      contentStyle: {
+        padding: "12px",
       },
     };
   },
@@ -413,6 +427,15 @@ export default {
 
   .right {
     width: 220px;
+
+    .card {
+      margin-top: 8px;
+      border-radius: 6px;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
   }
 }
 </style>

@@ -12,6 +12,7 @@ export default {
     return {
       themeOverrides: {
         common: {
+          fontSize: "12px",
           primaryColor: "#2080f0",
           primaryColorHover: "#4098FC",
           primaryColorPressed: "#1060C9",

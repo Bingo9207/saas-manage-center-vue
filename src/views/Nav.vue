@@ -3,6 +3,7 @@
     <div class="container">
       <div class="column" v-for="item in nav" :key="item.name">
         <div class="avatar">
+          <n-icon size="36" color="#999"><beer /></n-icon>
         </div>
         <dl>
           <dt>{{ item.name }}</dt>
@@ -22,6 +23,7 @@
 
 <script>
 import { mapState } from "vuex";
+import { Beer } from "@vicons/ionicons5";
 export default {
   name: "Nav",
   data() {
@@ -54,14 +56,15 @@ export default {
       });
     },
   },
-  components: {
-  },
   watch: {
     sideKeys(newValue, oldValue) {
       if (newValue && oldValue !== newValue) {
         this.fetchRouter();
       }
     },
+  },
+  components: {
+    Beer,
   },
 };
 </script>
