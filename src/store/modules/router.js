@@ -1,6 +1,5 @@
 const state = () => ({
   sideKeys: "",
-
   tabKeys: "",
   tabList: []
 })

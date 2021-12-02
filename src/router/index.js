@@ -1,31 +1,32 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {
+  createRouter,
+  createWebHistory
+} from 'vue-router'
 
-const routes = [
-  {
+const routes = [{
     path: '/login',
     name: 'login',
     component: () => import('../views/Login.vue')
   },
   {
     path: '/',
-    component: () => import('../views/Layout.vue'),
+    component: () => import("../views/Layout.vue"),
     redirect: '/welcome',
-    children: [
-      {
+    children: [{
         path: '/welcome',
         name: '工作台',
         component: () => import('../views/Welcome.vue')
       },
-      // {
-      //   path: '/nav',
-      //   name: '导航页',
-      //   component: nav
-      // },
-      // {
-      //   path: '/:name1/:name2/:name3',
-      //   name: '动态',
-      //   component: blankLayout
-      // }
+      {
+        path: '/nav',
+        name: '导航页',
+        component: () => import('../views/Nav.vue')
+      },
+      {
+        path: '/:name1/:name2/:name3',
+        name: '动态',
+        component: () => import('../views/BlankLayout.vue')
+      }
     ]
   }
 ]

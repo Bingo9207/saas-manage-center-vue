@@ -11,20 +11,11 @@ export default {
   data() {
     return {
       themeOverrides: {
-        // common: {
-        //   primaryColor: "#1890ff",
-        //   primaryColorHover: "#f60"
-        // },
-        // Button: {
-        //   textColor: "#FF0000",
-        // },
-        // Select: {
-        //   peers: {
-        //     InternalSelection: {
-        //       textColor: "#FF0000",
-        //     },
-        //   },
-        // },
+        common: {
+          primaryColor: "#2080f0",
+          primaryColorHover: "#4098FC",
+          primaryColorPressed: "#1060C9",
+        },
       },
     };
   },

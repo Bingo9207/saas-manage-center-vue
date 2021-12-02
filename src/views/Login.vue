@@ -216,7 +216,7 @@ export default {
           path: "/welcome",
           name: "工作台",
         });
-        // this.$router.push("/welcome");
+        this.$router.push("/welcome");
       }
     },
   },

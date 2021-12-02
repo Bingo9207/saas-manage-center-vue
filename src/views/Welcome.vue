@@ -1,31 +1,73 @@
 <template>
-  <div class="container">
-    <div class="left">
-      <div class="summary" v-loading="loadingSummary">
-        <n-grid x-gap="8" :cols="4">
-          <n-gi :span="6" v-for="item in summaryList" :key="item.field">
-            <div
-              class="wrapper"
-              :style="{ backgroundImage: 'url(' + item.background + ')' }"
-            >
-              <div class="icon"></div>
-              <dl>
-                <dt>{{ item.title }}</dt>
-                <dd>{{ summaryData[item.field] || 0 }}</dd>
-              </dl>
-            </div>
-          </n-gi>
-        </n-grid>
+  <n-spin
+    :show="loadingSummary || loadingSales || loadingPurchase || loadingStock"
+  >
+    <div class="container">
+      <div class="left">
+        <div class="summary">
+          <n-grid x-gap="8">
+            <n-gi :span="6" v-for="item in summaryList" :key="item.field">
+              <div
+                class="wrapper"
+                :style="{ backgroundImage: 'url(' + item.background + ')' }"
+              >
+                <div class="icon">
+                  <n-icon size="48">
+                    <people-outline v-if="item.field === 'newVipCount'" />
+                    <cart-outline v-if="item.field === 'newPurchaseCount'" />
+                    <easel-outline v-if="item.field === 'newSaleAmt'" />
+                    <home-outline v-if="item.field === 'newStockCount'" />
+                  </n-icon>
+                </div>
+                <dl>
+                  <dt>{{ item.title }}</dt>
+                  <dd>{{ summaryData[item.field] || 0 }}</dd>
+                </dl>
+              </div>
+            </n-gi>
+          </n-grid>
+        </div>
+        <div class="chart">
+          <div class="sheet" id="sales"></div>
+        </div>
+        <div class="chart">
+          <n-grid x-gap="8" class="layout">
+            <n-gi :span="12">
+              <div class="sheet" id="purchase"></div>
+            </n-gi>
+            <n-gi :span="12">
+              <div class="sheet" id="stock"></div>
+            </n-gi>
+          </n-grid>
+        </div>
+      </div>
+      <div class="right">
+        <n-card title="卡片" size="small" :header-style="headerStyle">
+          卡片内容
+        </n-card>
+        <n-card
+          title="常用功能"
+          size="small"
+          :segmented="{
+            content: 'hard',
+          }"
+        >
+          卡片内容
+           <n-button type="primary">Primary</n-button>
+        </n-card>
       </div>
     </div>
-    <div class="right">
-     
-    </div>
-  </div>
+  </n-spin>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import {
+  PeopleOutline,
+  CartOutline,
+  EaselOutline,
+  HomeOutline,
+} from "@vicons/ionicons5";
 export default {
   name: "Welcome",
   data() {
@@ -54,19 +96,26 @@ export default {
           background: require("../assets/welcome/workbench4.jpg"),
         },
       ],
+      loadingSales: false,
       salesData: [],
+      loadingPurchase: false,
       purchaseData: [],
       purchaseDays: "7",
+      loadingStock: false,
       stockData: [],
+      headerStyle: {
+        padding: "6px 10px",
+        borderBottom: "1px solid #ddd",
+      },
     };
-  },
-  created() {
-    // this.reload();
   },
   computed: {
     ...mapState({
       tabKeys: (state) => state.router.tabKeys,
     }),
+  },
+  created() {
+    this.reload();
   },
   methods: {
     reload() {
@@ -88,10 +137,12 @@ export default {
       });
     },
     fetchSalesStatistics() {
+      this.loadingSales = true;
       this.$http({
         url: `/api/saas/report/weekTrend`,
         method: "GET",
       }).then((res) => {
+        this.loadingSales = false;
         if (res.code === 0) {
           const sortArray = [];
           const sortJson = {};
@@ -108,7 +159,9 @@ export default {
       });
     },
     loadSalesChart() {
-      const myChart = this.$echarts.init(document.querySelector("#sales"));
+      const node = document.querySelector("#sales");
+      if (!node) return;
+      const myChart = this.$echarts.init(node);
       const dateArray = [];
       const dataArray = [];
       this.salesData.forEach((item) => {
@@ -152,10 +205,12 @@ export default {
       });
     },
     fetchPurchaseStatistics() {
+      this.loadingPurchase = true;
       this.$http({
         url: `/api/saas/report/purchaseSum?days=${this.purchaseDays}`,
         method: "GET",
       }).then((res) => {
+        this.loadingPurchase = false;
         if (res.code === 0) {
           const sortArray = [];
           const sortJson = {};
@@ -172,7 +227,9 @@ export default {
       });
     },
     loadPurchaseChart() {
-      const myChart = this.$echarts.init(document.querySelector("#purchase"));
+      const node = document.querySelector("#purchase");
+      if (!node) return;
+      const myChart = this.$echarts.init(node);
       const dateArray = [];
       const dataArray = [];
       this.purchaseData.forEach((item) => {
@@ -214,10 +271,12 @@ export default {
       });
     },
     fetchInventory() {
+      this.loadingStock = true;
       this.$http({
         url: `/api/saas/report/allStockStatus`,
         method: "GET",
       }).then((res) => {
+        this.loadingStock = false;
         if (res.code === 0) {
           this.stockData = res.data;
           this.loadStockChart();
@@ -225,7 +284,9 @@ export default {
       });
     },
     loadStockChart() {
-      const myChart = this.$echarts.init(document.querySelector("#stock"));
+      const node = document.querySelector("#stock");
+      if (!node) return;
+      const myChart = this.$echarts.init(node);
       const finallyArray = this.stockData.filter((item) => item.itemClsName);
       const dataArray = [];
       finallyArray.forEach((item) => {
@@ -273,6 +334,12 @@ export default {
       }
     },
   },
+  components: {
+    PeopleOutline,
+    CartOutline,
+    EaselOutline,
+    HomeOutline,
+  },
 };
 </script>
 
@@ -280,7 +347,7 @@ export default {
 .container {
   display: flex;
   flex-direction: row;
-  height: 100%;
+  height: calc(100vh - 106px);
   overflow: hidden;
 
   .left {
@@ -300,8 +367,10 @@ export default {
         background-size: auto 100%;
 
         .icon {
-          width: 68px;
-          height: 68px;
+          width: 48px;
+          height: 48px;
+          padding: 10px 5px 10px 15px;
+          color: #f1f1f1;
         }
 
         dl {
@@ -344,8 +413,6 @@ export default {
 
   .right {
     width: 220px;
-
-   
   }
 }
 </style>
