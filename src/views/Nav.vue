@@ -119,7 +119,7 @@ export default {
             user-select: none;
 
             &:hover {
-              color: #09f;
+              color: var(--primaryColor);
             }
           }
         }

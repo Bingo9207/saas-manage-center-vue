@@ -1,5 +1,9 @@
 <template>
-  <universal-page :actionArray="actionArray" :formColumns="formColumns" :tableProps="tableProps" />
+  <universal-page
+    :actionArray="actionArray"
+    :formColumns="formColumns"
+    :tableProps="tableProps"
+  />
 </template>
 
 <script>
@@ -11,13 +15,12 @@ export default {
       actionArray: [{ type: "close" }],
       formColumns: [
         {
-          name: 'itemNo'
+          label: "商品条码",
+          name: "itemNo",
         },
         {
-          name: 'itemNo1'
-        },
-        {
-          name: 'itemNo2'
+          label: "自编码",
+          name: "itemSubno",
         }
       ],
       tableProps: {
@@ -26,15 +29,17 @@ export default {
           {
             title: "商品条码",
             dataIndex: "itemNo",
+            width: 160,
           },
           {
             title: "商品自编码",
             dataIndex: "itemSubno",
+            width: 160,
           },
           {
             title: "商品名称",
             dataIndex: "itemName",
-            width: 160
+            width: 160,
           },
         ],
       },

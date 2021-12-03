@@ -330,10 +330,10 @@ export default {
 
         .menu-item-active {
           color: #fff;
-          background-color: #1890ff;
+          background-color: var(--primaryColor);
 
           &:hover {
-            background-color: #1890ff;
+            background-color: var(--primaryColor);
           }
         }
       }

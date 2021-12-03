@@ -14,7 +14,7 @@
       </div>
       <a-divider style="margin: 8px 0 0 0" />
       <div>
-        <universal-form :columns="formColumns" />
+        <universal-form ref="form" :columns="formColumns" />
       </div>
     </div>
     <div class="container">
@@ -77,6 +77,7 @@ export default {
       current: 1,
       pageSize: 50,
       total: 0,
+      condition: {},
     };
   },
   created() {
@@ -90,7 +91,9 @@ export default {
         data: {
           current: this.current,
           size: this.pageSize,
-          model: {},
+          model: {
+            ...this.condition
+          },
         },
       }).then((res) => {
         this.loadingTable = false;
@@ -108,7 +111,14 @@ export default {
       this.pageSize = size;
       this.fetchTableList();
     },
-    onToolEvent(type) {},
+    onToolEvent(type) {
+      if (type === "search") {
+        this.$refs.form.$refs.formRef.validate().then(() => {
+          this.condition = this.$refs.form.form;
+          this.fetchTableList();
+        });
+      }
+    },
     onActionEvent(type) {
       if (type === "close") {
         this.$store.commit("router/deleteTabItem");
