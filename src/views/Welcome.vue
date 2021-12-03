@@ -1,44 +1,51 @@
 <template>
-  <n-spin
-    :show="loadingSummary || loadingSales || loadingPurchase || loadingStock"
+  <a-spin
+    :spinning="
+      loadingSummary || loadingSales || loadingPurchase || loadingStock
+    "
   >
     <div class="container">
       <div class="left">
         <div class="summary">
-          <n-grid x-gap="8">
-            <n-gi :span="6" v-for="item in summaryList" :key="item.field">
+          <a-row gutter="8">
+            <a-col :span="6" v-for="item in summaryList" :key="item.field">
               <div
                 class="wrapper"
                 :style="{ backgroundImage: 'url(' + item.background + ')' }"
               >
                 <div class="icon">
-                  <n-icon size="48">
+                  <!-- <n-icon size="48">
                     <people-outline v-if="item.field === 'newVipCount'" />
                     <cart-outline v-if="item.field === 'newPurchaseCount'" />
                     <easel-outline v-if="item.field === 'newSaleAmt'" />
                     <home-outline v-if="item.field === 'newStockCount'" />
-                  </n-icon>
+                  </n-icon> -->
                 </div>
                 <dl>
                   <dt>{{ item.title }}</dt>
-                  <dd>{{ summaryData[item.field] || 0 }}</dd>
+                  <dd>
+                    <a-statistic
+                      :value="summaryData[item.field] || 0"
+                      :value-style="summaryStyle"
+                    />
+                  </dd>
                 </dl>
               </div>
-            </n-gi>
-          </n-grid>
+            </a-col>
+          </a-row>
         </div>
         <div class="chart">
           <div class="sheet" id="sales"></div>
         </div>
         <div class="chart">
-          <n-grid x-gap="8" class="layout">
-            <n-gi :span="12">
+          <a-row gutter="8" class="layout">
+            <a-col :span="12">
               <div class="sheet" id="purchase"></div>
-            </n-gi>
-            <n-gi :span="12">
+            </a-col>
+            <a-col :span="12">
               <div class="sheet" id="stock"></div>
-            </n-gi>
-          </n-grid>
+            </a-col>
+          </a-row>
         </div>
       </div>
       <div class="right">
@@ -68,17 +75,11 @@
         </n-card>
       </div>
     </div>
-  </n-spin>
+  </a-spin>
 </template>
 
 <script>
 import { mapState } from "vuex";
-import {
-  PeopleOutline,
-  CartOutline,
-  EaselOutline,
-  HomeOutline,
-} from "@vicons/ionicons5";
 export default {
   name: "Welcome",
   data() {
@@ -107,6 +108,11 @@ export default {
           background: require("../assets/welcome/workbench4.jpg"),
         },
       ],
+      summaryStyle: {
+        fontSize: "18px",
+        color: "#f1f1f1",
+        lineHeight: "34px"
+      },
       loadingSales: false,
       salesData: [],
       loadingPurchase: false,
@@ -348,12 +354,7 @@ export default {
       }
     },
   },
-  components: {
-    PeopleOutline,
-    CartOutline,
-    EaselOutline,
-    HomeOutline,
-  },
+  components: {},
 };
 </script>
 
@@ -373,7 +374,7 @@ export default {
       .wrapper {
         display: flex;
         flex-direction: row;
-        height: 68px;
+        height: 98px;
         padding: 15px 12% 15px 0;
         border-radius: 6px;
         background-repeat: no-repeat;

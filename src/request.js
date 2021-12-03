@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const instance = axios.create({
-  timeout: 1000,
+  timeout: 60000,
   headers: {
     Authorization: "Basic ZGJzX3dlYjpkYnNfd2ViX3NlY3JldA=="
   }

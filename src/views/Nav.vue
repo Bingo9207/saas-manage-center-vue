@@ -3,7 +3,7 @@
     <div class="container">
       <div class="column" v-for="item in nav" :key="item.name">
         <div class="avatar">
-          <n-icon size="36" color="#999"><beer /></n-icon>
+          <my-icon :type="item.meta.icon" :style="iconStyle" />
         </div>
         <dl>
           <dt>{{ item.name }}</dt>
@@ -23,12 +23,16 @@
 
 <script>
 import { mapState } from "vuex";
-import { Beer } from "@vicons/ionicons5";
+import MyIcon from "../components/MyIcon.vue";
 export default {
   name: "Nav",
   data() {
     return {
       nav: [],
+      iconStyle: {
+        fontSize: "32px",
+        color: "#999",
+      },
     };
   },
   computed: {
@@ -64,12 +68,11 @@ export default {
     },
   },
   components: {
-    Beer,
+    MyIcon,
   },
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
 .container-nav {
   height: 100%;
@@ -103,7 +106,7 @@ export default {
         }
 
         dd {
-          margin-left: 0;
+          margin: 0;
           font-size: 16px;
           color: #666;
           line-height: 25px;

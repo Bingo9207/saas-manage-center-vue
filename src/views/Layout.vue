@@ -4,14 +4,19 @@
       <div class="logo"><img src="../assets/logo.png" alt="logo" /></div>
       <div class="title">云•POS商业管理系统</div>
       <div class="account">
-        <n-dropdown trigger="click" @select="handleAccount" :options="options">
-          <a class="user"
-            >{{ userName }} ({{ account }})
-            <n-icon size="12">
-              <chevron-down />
-            </n-icon>
+        <a-dropdown trigger="click">
+          <a class="ant-dropdown-link" @click.prevent>
+            {{ userName }} ({{ account }})
+            <down-outlined />
           </a>
-        </n-dropdown>
+          <template #overlay>
+            <a-menu @click="handleAccount">
+              <a-menu-item>{{ formatBranchInfo }}</a-menu-item>
+              <a-menu-divider />
+              <a-menu-item key="logout">退出登录</a-menu-item>
+            </a-menu>
+          </template>
+        </a-dropdown>
       </div>
     </div>
     <div class="layout-container">
@@ -28,27 +33,7 @@
             @click="linkRouter(item)"
           >
             <div class="icon">
-              <n-icon size="24">
-                <layers v-if="item.path === '/welcome'" />
-                <folder v-if="item.path === '/navigation/goodsManage/index'" />
-                <cart v-if="item.path === '/navigation/purchaseManage/index'" />
-                <easel v-if="item.path === '/navigation/salesManage/index'" />
-                <home
-                  v-if="item.path === '/navigation/inventoryManage/index'"
-                />
-                <water-sharp
-                  v-if="item.path === '/navigation/freshManage/index'"
-                />
-                <people v-if="item.path === '/navigation/memberManage/index'" />
-                <airplane v-if="item.path === '/navigation/order/index'" />
-                <wallet
-                  v-if="item.path === '/navigation/financialManage/index'"
-                />
-                <bar-chart
-                  v-if="item.path === '/navigation/decisionManage/index'"
-                />
-                <settings v-if="item.path === '/navigation/setting/index'" />
-              </n-icon>
+              <my-icon :type="item.meta.icon" :style="iconStyle" />
             </div>
             <div class="title">{{ item.name }}</div>
           </div>
@@ -57,17 +42,16 @@
       <div class="layout-main">
         <div class="layout-tabs-container">
           <div class="layout-tabs">
-            <n-tag
+            <a-tag
               v-for="tag in tabList"
               size="large"
               :key="tag.path"
               :closable="tag.path.split('/').length > 2"
-              :color="normalTab"
               @click="changeTab(tag)"
               @close.stop="closeTab(tag)"
             >
               {{ tag.name }}
-            </n-tag>
+            </a-tag>
           </div>
         </div>
         <div class="layout-content">
@@ -83,33 +67,22 @@
 <script>
 import { defineAsyncComponent } from "vue";
 import { mapState } from "vuex";
+import { DownOutlined } from "@ant-design/icons-vue";
 import ErrorComponent from "./Error.vue";
-import {
-  Layers,
-  Folder,
-  Cart,
-  Easel,
-  Home,
-  WaterSharp,
-  People,
-  Airplane,
-  Wallet,
-  BarChart,
-  Settings,
-  ChevronDown,
-  DotMark,
-} from "@vicons/ionicons5";
+import MyIcon from "../components/MyIcon.vue";
 export default {
   name: "Layout",
   data() {
     return {
       account: "",
       userName: "",
-      options: [],
       sideNav: [],
       tabPlatList: [],
       normalTab: {
         // borderColor
+      },
+      iconStyle: {
+        fontSize: "24px",
       },
     };
   },
@@ -119,12 +92,15 @@ export default {
       tabKeys: (state) => state.router.tabKeys,
       tabList: (state) => state.router.tabList,
     }),
+    formatBranchInfo() {
+      return `${sessionStorage.getItem("branchName")} (${sessionStorage.getItem(
+        "branchNo"
+      )})`;
+    },
   },
   created() {
     const account = sessionStorage.getItem("account");
     const userName = sessionStorage.getItem("userName");
-    const branchNo = sessionStorage.getItem("branchNo");
-    const branchName = sessionStorage.getItem("branchName");
     const router = JSON.parse(sessionStorage.getItem("router") || "[]");
     if (!account) {
       this.$router.push("/login");
@@ -132,20 +108,6 @@ export default {
     this.sideNav = router;
     this.account = account;
     this.userName = userName;
-    this.options = [
-      {
-        label: `${branchName} (${branchNo})`,
-        key: "userInfo",
-      },
-      {
-        type: "divider",
-        key: "d1",
-      },
-      {
-        label: "退出登录",
-        key: "logout",
-      },
-    ];
     // 初始化赋值
     this.initSideKeys();
     this.initTabKeys();
@@ -234,8 +196,8 @@ export default {
       });
     },
     // 用户操作
-    handleAccount(type) {
-      switch (type) {
+    handleAccount({ key }) {
+      switch (key) {
         case "logout":
           this.$store.commit("router/logout");
           this.$router.push("/login");
@@ -258,18 +220,9 @@ export default {
     },
   },
   components: {
-    Layers,
-    Folder,
-    Cart,
-    Easel,
-    Home,
-    WaterSharp,
-    People,
-    Airplane,
-    Wallet,
-    BarChart,
-    Settings,
-    ChevronDown,
+    DownOutlined,
+    ErrorComponent,
+    MyIcon,
   },
 };
 </script>
@@ -349,7 +302,7 @@ export default {
         }
 
         .menu-item {
-          height: 64px;
+          height: 80px;
           padding: 8px 0;
           cursor: pointer;
 
@@ -358,7 +311,7 @@ export default {
           }
 
           .icon {
-            height: 24px;
+            height: 32px;
             padding: 4px 0;
           }
 

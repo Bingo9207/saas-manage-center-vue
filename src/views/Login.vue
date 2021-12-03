@@ -1,58 +1,45 @@
 <template>
   <div class="layout">
     <div class="container">
-      <n-form
-        ref="loginForm"
-        label-placement="left"
-        :model="form"
-        :rules="rules"
-      >
-        <n-form-item path="organization">
-          <n-input placeholder="企业编号" v-model:value="form.organization">
+      <a-form ref="loginForm" :model="form" :rules="rules">
+        <a-form-item name="organization">
+          <a-input placeholder="企业编号" v-model:value="form.organization">
             <template #prefix>
-              <n-icon>
-                <business-outline />
-              </n-icon>
+              <bank-outlined :style="iconStyle" />
             </template>
-          </n-input>
-        </n-form-item>
-        <n-form-item path="account">
-          <n-input placeholder="用户名" v-model:value="form.account">
+          </a-input>
+        </a-form-item>
+        <a-form-item name="account">
+          <a-input placeholder="用户名" v-model:value="form.account">
             <template #prefix>
-              <n-icon>
-                <person-outline />
-              </n-icon>
+              <user-outlined :style="iconStyle" />
             </template>
-          </n-input>
-        </n-form-item>
-        <n-form-item path="password">
-          <n-input
-            type="password"
+          </a-input>
+        </a-form-item>
+        <a-form-item name="password">
+          <a-input
             placeholder="密码"
+            type="password"
             v-model:value="form.password"
           >
             <template #prefix>
-              <n-icon>
-                <lock-closed-outline />
-              </n-icon>
+              <lock-outlined :style="iconStyle" />
             </template>
-          </n-input>
-        </n-form-item>
-        <n-form-item path="code">
-          <n-input placeholder="验证码" v-model:value="form.code" @keyup.enter="login">
+          </a-input>
+        </a-form-item>
+        <a-form-item name="code">
+          <a-input placeholder="验证码" v-model:value="form.code" maxlength="4">
             <template #prefix>
-              <n-icon>
-                <image-outline />
-              </n-icon>
+              <code-outlined :style="iconStyle" />
             </template>
-            <template #suffix>
+            <template #addonAfter>
               <img class="code" :src="verifyCode" @click="fetchVerifyCode" />
             </template>
-          </n-input>
-        </n-form-item>
-      </n-form>
-      <n-button block :loading="loadingLogin" type="primary" @click="login"
-        >登 录</n-button
+          </a-input>
+        </a-form-item>
+      </a-form>
+      <a-button type="primary" block :loading="loadingLogin" @click="login"
+        >登 录</a-button
       >
     </div>
   </div>
@@ -60,47 +47,52 @@
 
 <script>
 import {
-  BusinessOutline,
-  PersonOutline,
-  LockClosedOutline,
-  ImageOutline,
-} from "@vicons/ionicons5";
+  BankOutlined,
+  UserOutlined,
+  LockOutlined,
+  CodeOutlined,
+} from "@ant-design/icons-vue";
 export default {
   name: "Login",
   data() {
     return {
       form: {},
       rules: {
-        organization: {
-          required: true,
-          trigger: "input",
-          message: "企业编号不能为空",
-        },
-        account: {
-          required: true,
-          trigger: "input",
-          message: "用户名不能为空",
-        },
-        password: {
-          required: true,
-          trigger: "input",
-          message: "密码不能为空",
-        },
-        code: {
-          required: true,
-          trigger: "input",
-          message: "验证码不能为空",
-        },
+        organization: [
+          {
+            required: true,
+            message: "企业编号不能为空",
+            trigger: "change",
+          },
+        ],
+        account: [
+          {
+            required: true,
+            message: "用户名不能为空",
+            trigger: "change",
+          },
+        ],
+        password: [
+          {
+            required: true,
+            message: "密码不能为空",
+            trigger: "change",
+          },
+        ],
+        code: [
+          {
+            required: true,
+            message: "验证码不能为空",
+            trigger: "change",
+          },
+        ],
       },
       verifyCode: undefined,
       loadingLogin: false,
+      iconStyle: {
+        color: "rgba(0, 0, 0, .25)",
+      },
     };
-  },
-  components: {
-    BusinessOutline,
-    PersonOutline,
-    LockClosedOutline,
-    ImageOutline,
   },
   created() {
     const organization = localStorage.getItem("organization");
@@ -132,8 +124,9 @@ export default {
       });
     },
     login() {
-      this.$refs.loginForm.validate((valid) => {
-        if (!valid) {
+      this.$refs.loginForm
+        .validate()
+        .then(() => {
           const tenantValue = window.btoa(
             encodeURIComponent(this.form.organization)
           );
@@ -174,8 +167,10 @@ export default {
               this.fetchVerifyCode();
             }
           });
-        }
-      });
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
     },
     fetchRouter() {
       this.loadingRouter = true;
@@ -220,6 +215,12 @@ export default {
       }
     },
   },
+  components: {
+    BankOutlined,
+    UserOutlined,
+    LockOutlined,
+    CodeOutlined,
+  },
 };
 </script>
 
@@ -244,7 +245,7 @@ export default {
 
     .code {
       display: block;
-      height: 32px;
+      height: 30px;
       cursor: pointer;
     }
   }
