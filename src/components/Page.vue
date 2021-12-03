@@ -138,6 +138,7 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100%;
+  overflow: hidden;
 
   .header {
     padding: 8px;
