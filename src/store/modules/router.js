@@ -37,9 +37,10 @@ const mutations = {
   },
   deleteTabItem(state, payload) {
     const tempArray = state.tabList.concat([]);
-    const index = tempArray.findIndex(item => item.path === payload);
+    const deletePath = payload || state.tabKeys;
+    const index = tempArray.findIndex(item => item.path === deletePath);
     let path = state.tabKeys;
-    if (state.tabKeys === payload) {
+    if (state.tabKeys === deletePath) {
       if (index === tempArray.length - 1) {
         path = tempArray[index - 1].path;
       } else {

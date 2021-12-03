@@ -179,7 +179,6 @@ export default {
               break;
 
             default:
-              console.log(item.path);
               tempItem.comp = defineAsyncComponent({
                 loader: () => import("." + item.path),
                 errorComponent: ErrorComponent,

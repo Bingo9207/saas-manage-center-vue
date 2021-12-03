@@ -4,6 +4,7 @@
       v-for="item in toolArray"
       :key="item.type"
       type="primary"
+      @click="onToolEvent(item.type)"
     >
       <template #icon>
         <SearchOutlined v-if="item.type === 'search'" />
@@ -24,7 +25,7 @@ import {
   CloseOutlined,
 } from "@ant-design/icons-vue";
 export default {
-  name: "Page",
+  name: "Toolbar",
   props: {
     toolArray: {
       default: [],
@@ -34,7 +35,11 @@ export default {
     return {};
   },
   created() {
-    console.log(this.toolArray);
+  },
+  methods: {
+    onToolEvent(type) {
+      this.$emit('onToolEvent', type);
+    },
   },
   components: {
     SearchOutlined,

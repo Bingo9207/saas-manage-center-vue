@@ -28,7 +28,7 @@
           </a-input>
         </a-form-item>
         <a-form-item name="code">
-          <a-input placeholder="验证码" v-model:value="form.code" maxlength="4">
+          <a-input placeholder="验证码" v-model:value="form.code" maxlength="4" @pressEnter="login">
             <template #prefix>
               <code-outlined :style="iconStyle" />
             </template>

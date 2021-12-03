@@ -1,5 +1,5 @@
 <template>
-  <universal-page :tableProps="tableProps" />
+  <universal-page :actionArray="actionArray" :formColumns="formColumns" :tableProps="tableProps" />
 </template>
 
 <script>
@@ -8,8 +8,35 @@ export default {
   name: "1",
   data() {
     return {
+      actionArray: [{ type: "close" }],
+      formColumns: [
+        {
+          name: 'itemNo'
+        },
+        {
+          name: 'itemNo1'
+        },
+        {
+          name: 'itemNo2'
+        }
+      ],
       tableProps: {
-        url: "/api/saas/bdItemInfo/bizpage"
+        url: "/api/saas/bdItemInfo/bizpage",
+        columns: [
+          {
+            title: "商品条码",
+            dataIndex: "itemNo",
+          },
+          {
+            title: "商品自编码",
+            dataIndex: "itemSubno",
+          },
+          {
+            title: "商品名称",
+            dataIndex: "itemName",
+            width: 160
+          },
+        ],
       },
     };
   },

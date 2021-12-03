@@ -1,154 +1,82 @@
 <template>
   <div class="page">
     <div class="header">
-      <div>
-        <universal-tool :toolArray="toolArray" />
+      <div class="tool">
+        <div class="main">
+          <universal-tool :toolArray="toolArray" @onToolEvent="onToolEvent" />
+        </div>
+        <div class="action">
+          <universal-tool
+            :toolArray="actionArray"
+            @onToolEvent="onActionEvent"
+          />
+        </div>
       </div>
-      <n-divider class="line" />
+      <a-divider style="margin: 8px 0 0 0" />
+      <div>
+        <universal-form :columns="formColumns" />
+      </div>
     </div>
     <div class="container">
       <div class="main">
-        123
-        <!-- <n-data-table
+        <universal-table
+          bordered
           class="table"
           size="small"
-          :columns="columns"
-          :data="data"
-          :pagination="pagination"
+          :columns="tableProps.columns"
+          :dataSource="data"
           :loading="loadingTable"
-          :single-line="false"
-          :flex-height="true"
-          scroll-x="2400"
-        /> -->
+          :pagination="false"
+          :scroll="tableScroll"
+          rowKey="id"
+        />
       </div>
+    </div>
+    <div class="footer">
+      <a-pagination
+        size="small"
+        show-size-changer
+        v-model:current="current"
+        :page-size="pageSize"
+        :total="total"
+        :page-size-options="['50', '100', '200', '500']"
+        :show-total="(total) => `共 ${total} 条`"
+        @change="changePage"
+        @showSizeChange="changePageSize"
+      >
+        <template #buildOptionText="props">
+          <span>{{ props.value }} 条/页</span>
+        </template>
+      </a-pagination>
     </div>
   </div>
 </template>
 
 <script>
 import UniversalTool from "./Toolbar.vue";
+import UniversalForm from "./Form.vue";
+import UniversalTable from "./Table.vue";
 export default {
   name: "Page",
   props: {
+    actionArray: {
+      default: [],
+    },
+    formColumns: {
+      default: [],
+    },
     tableProps: {
       default: {},
     },
   },
   data() {
     return {
-      toolArray: [{ type: "search" }, { type: "add" }, { type: "close" }],
+      toolArray: [{ type: "search" }, { type: "add" }],
       data: [],
       loadingTable: false,
-      columns: [
-        {
-          title: "商品编码",
-          key: "itemNo",
-          align: "center",
-          width: 200,
-          ellipsis: {
-            tooltip: true,
-          },
-        },
-        {
-          title: "商品名称",
-          key: "itemName",
-          align: "center",
-          width: 200,
-          ellipsis: {
-            tooltip: true,
-          },
-        },
-        {
-          title: "商品编码",
-          key: "itemNo",
-          align: "center",
-          width: 200,
-          ellipsis: {
-            tooltip: true,
-          },
-        },
-        {
-          title: "商品名称",
-          key: "itemName",
-          align: "center",
-          width: 200,
-          ellipsis: {
-            tooltip: true,
-          },
-        },
-        {
-          title: "商品编码",
-          key: "itemNo",
-          align: "center",
-          width: 200,
-          ellipsis: {
-            tooltip: true,
-          },
-        },
-        {
-          title: "商品名称",
-          key: "itemName",
-          align: "center",
-          width: 200,
-          ellipsis: {
-            tooltip: true,
-          },
-        },
-        {
-          title: "商品编码",
-          key: "itemNo",
-          align: "center",
-          width: 200,
-          ellipsis: {
-            tooltip: true,
-          },
-        },
-        {
-          title: "商品名称",
-          key: "itemName",
-          align: "center",
-          width: 200,
-          ellipsis: {
-            tooltip: true,
-          },
-        },
-        {
-          title: "商品编码",
-          key: "itemNo",
-          align: "center",
-          width: 200,
-          ellipsis: {
-            tooltip: true,
-          },
-        },
-        {
-          title: "商品名称",
-          key: "itemName",
-          align: "center",
-          width: 200,
-          ellipsis: {
-            tooltip: true,
-          },
-        },
-        {
-          title: "商品编码",
-          key: "itemNo",
-          align: "center",
-          width: 200,
-          ellipsis: {
-            tooltip: true,
-          },
-        },
-        {
-          title: "商品名称",
-          key: "itemName",
-          align: "center",
-          width: 200,
-          ellipsis: {
-            tooltip: true,
-          },
-        },
-      ],
+      current: 1,
+      pageSize: 50,
+      total: 0,
     };
   },
   created() {
@@ -160,19 +88,37 @@ export default {
       this.$http({
         url: this.tableProps.url,
         data: {
-          current: 1,
-          size: 100,
+          current: this.current,
+          size: this.pageSize,
           model: {},
         },
       }).then((res) => {
         this.loadingTable = false;
-        console.log(res);
-        this.data = res.data.records;
+        if (res?.code === 0) {
+          this.data = res.data.records;
+          this.total = res.data.total;
+        }
       });
+    },
+    changePage(page) {
+      this.current = page;
+      this.fetchTableList();
+    },
+    changePageSize(page, size) {
+      this.pageSize = size;
+      this.fetchTableList();
+    },
+    onToolEvent(type) {},
+    onActionEvent(type) {
+      if (type === "close") {
+        this.$store.commit("router/deleteTabItem");
+      }
     },
   },
   components: {
     UniversalTool,
+    UniversalForm,
+    UniversalTable,
   },
 };
 </script>
@@ -186,6 +132,19 @@ export default {
   .header {
     padding: 8px;
     background-color: #fff;
+
+    .tool {
+      display: flex;
+      flex-direction: row;
+
+      .main {
+        flex: 1;
+      }
+
+      .action {
+        text-align: right;
+      }
+    }
 
     .line {
       margin: 8px 0;
@@ -205,15 +164,12 @@ export default {
     .main {
       flex: 1;
       overflow: hidden;
-
-      .table {
-        height: 100%;
-
-        .n-data-table .n-data-table-table {
-          width: fit-content;
-        }
-      }
     }
+  }
+
+  .footer {
+    padding: 0 8px 8px;
+    background-color: #fff;
   }
 }
 </style>

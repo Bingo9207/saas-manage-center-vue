@@ -49,30 +49,16 @@
         </div>
       </div>
       <div class="right">
-        <n-card
-          class="card"
-          title="卡片"
-          size="small"
-          :segmented="{
-            content: 'hard',
-          }"
-          :header-style="headerStyle"
-          :content-style="contentStyle"
-        >
-          卡片内容
-        </n-card>
-        <n-card
-          class="card"
-          title="常用功能"
-          size="small"
-          :segmented="{
-            content: 'hard',
-          }"
-          :header-style="headerStyle"
-          :content-style="contentStyle"
-        >
-          卡片内容
-        </n-card>
+        <a-card class="card" size="small" title="系统公告">
+          <p>card content</p>
+          <p>card content</p>
+          <p>card content</p>
+        </a-card>
+        <a-card class="card" size="small" title="常用功能">
+          <p>card content</p>
+          <p>card content</p>
+          <p>card content</p>
+        </a-card>
       </div>
     </div>
   </a-spin>
@@ -111,7 +97,7 @@ export default {
       summaryStyle: {
         fontSize: "18px",
         color: "#f1f1f1",
-        lineHeight: "34px"
+        lineHeight: "34px",
       },
       loadingSales: false,
       salesData: [],
