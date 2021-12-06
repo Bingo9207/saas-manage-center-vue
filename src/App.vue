@@ -28,6 +28,7 @@
     }
   }
 
+  // 按钮
   .ant-btn-primary {
     border-color: @color;
     background: @color;
@@ -40,6 +41,7 @@
     }
   }
 
+  // 表格
   .ant-table-thead > tr > th {
     background: @TwentyHalfColor;
   }
@@ -72,6 +74,7 @@
     background: @TenColor;
   }
 
+  // 分页
   .ant-pagination-item:focus,
   .ant-pagination-item:hover {
     border-color: @color;
@@ -107,6 +110,54 @@
   .ant-pagination-prev:hover .ant-pagination-item-link,
   .ant-pagination-next:hover .ant-pagination-item-link {
     color: @color;
+    border-color: @color;
+  }
+
+  // input框
+  .ant-input-affix-wrapper:hover {
+    border-color: @EightyColor;
+    border-right-width: 1px !important;
+  }
+  .ant-input-affix-wrapper:focus {
+    border-color: @EightyColor;
+    border-right-width: 1px !important;
+    outline: 0;
+    box-shadow: 0 0 0 2px @TwentyColor;
+  }
+  .ant-input:hover {
+    border-color: @EightyColor;
+    border-right-width: 1px !important;
+  }
+  .ant-input:focus {
+    border-color: @EightyColor;
+    border-right-width: 1px !important;
+    outline: 0;
+    box-shadow: 0 0 0 2px @TwentyColor;
+  }
+
+  // select
+  .ant-input-group-addon .ant-select-open .ant-select-selector,
+  .ant-input-group-addon .ant-select-focused .ant-select-selector {
+    color: @color;
+  }
+  .ant-select:not(.ant-select-disabled):hover .ant-select-selector {
+    border-color: @EightyColor;
+  }
+  .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input)
+    .ant-select-selector {
+    border-color: @EightyColor;
+    box-shadow: 0 0 0 2px @TwentyColor;
+  }
+  .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+    background-color: @TwentyColor;
+    .ant-select-item-option-state {
+      color: @color;
+    }
+  }
+
+  // checkbox
+  .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: @color;
     border-color: @color;
   }
 }

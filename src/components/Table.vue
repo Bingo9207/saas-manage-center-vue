@@ -9,7 +9,11 @@
     :pagination="false"
     :scroll="tableScroll"
     rowKey="id"
-  />
+  >
+    <template #flag="{ text }">
+      <a-checkbox :checked="text === '1'" @change="false" />
+    </template>
+  </a-table>
 </template>
 
 <script>
@@ -40,7 +44,25 @@ export default {
         item.width = item.width || 100;
         item.ellipsis = true;
         item.align = "center";
+        if (item.type) {
+          item.width = item.width || 120;
+          item.align = "right";
+          item.customHeaderCell = (column) => {
+            column.align = "center";
+            return column;
+          };
+          if (item.type === "price") {
+            item.customRender = (column) => {
+              return parseFloat(column.text || 0).toFixed(2);
+            };
+          } else if (item.type === "quantity") {
+            item.customRender = (column) => {
+              return parseFloat(column.text || 0).toFixed(3);
+            };
+          }
+        }
       });
+      console.log(this.columns);
       return this.columns;
     },
   },

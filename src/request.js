@@ -1,4 +1,7 @@
 import axios from 'axios'
+import {
+  Modal
+} from 'ant-design-vue';
 
 const instance = axios.create({
   timeout: 60000,
@@ -18,12 +21,12 @@ instance.interceptors.request.use(function (config) {
 });
 
 instance.interceptors.response.use(function (res) {
-  // if (res.data.code !== undefined && res.data.code !== 0) {
-  //   ElMessage({
-  //     message: res.data.msg,
-  //     type: 'error'
-  //   })
-  // }
+  if (res.data.code !== undefined && res.data.code !== 0) {
+    Modal.error({
+      title: res.data.msg,
+    });
+  }
+
   return res;
 }, function (error) {
   return Promise.reject(error);

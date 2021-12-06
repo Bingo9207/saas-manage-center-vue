@@ -14,7 +14,11 @@
       </div>
       <a-divider style="margin: 8px 0 0 0" />
       <div>
-        <universal-form ref="form" :columns="formColumns" />
+        <universal-form
+          ref="form"
+          :columns="formColumns"
+          :formValues="formValues"
+        />
       </div>
     </div>
     <div class="container">
@@ -65,6 +69,9 @@ export default {
     formColumns: {
       default: [],
     },
+    formValues: {
+      default: {},
+    },
     tableProps: {
       default: {},
     },
@@ -81,7 +88,7 @@ export default {
     };
   },
   created() {
-    this.fetchTableList();
+    this.onToolEvent("search");
   },
   methods: {
     fetchTableList() {
@@ -92,7 +99,7 @@ export default {
           current: this.current,
           size: this.pageSize,
           model: {
-            ...this.condition
+            ...this.condition,
           },
         },
       }).then((res) => {
@@ -113,10 +120,14 @@ export default {
     },
     onToolEvent(type) {
       if (type === "search") {
-        this.$refs.form.$refs.formRef.validate().then(() => {
-          this.condition = this.$refs.form.form;
-          this.fetchTableList();
-        });
+        if (this.$refs.form) {
+          this.$refs.form.$refs.formRef.validate().then(() => {
+            this.condition = this.$refs.form.form;
+            this.fetchTableList();
+          });
+        } else {
+          setTimeout(() => this.onToolEvent("search"), 300);
+        }
       }
     },
     onActionEvent(type) {

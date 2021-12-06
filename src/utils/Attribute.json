@@ -1,0 +1,31 @@
+{
+  "commodity": {
+    "name": "商品",
+    "props": {
+      "status": {
+        "name": "状态",
+        "options": [{
+            "label": "正常",
+            "value": "0"
+          },
+          {
+            "label": "停购",
+            "value": "1"
+          },
+          {
+            "label": "停售",
+            "value": "2"
+          },
+          {
+            "label": "淘汰",
+            "value": "3"
+          },
+          {
+            "label": "新品",
+            "value": "4"
+          }
+        ]
+      }
+    }
+  }
+}
